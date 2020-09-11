@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum, unique
-from types import resolve_bases
 from typing import List
 from urllib.parse import urljoin, urlparse
 
@@ -55,7 +54,7 @@ class Hentai(object):
 
     @property
     def upload_date(self) -> datetime:
-        raise NotImplementedError()
+        return datetime.fromtimestamp(self.api['upload_date'])
 
     _name = lambda self, type: [tag['name'] for tag in self.api['tags'] if tag['type'] == type]
 
@@ -94,7 +93,3 @@ class Hentai(object):
     def random_id() -> int:
         _session = requests.get("https://nhentai.net/random/")
         return int(urlparse(_session.url).path[3:-1])
-
-
-if __name__ == '__main__':
-    pass
