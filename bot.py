@@ -7,7 +7,7 @@ import discord
 from colorama import Fore, Style
 from discord.ext import commands
 
-from hentai import Hentai
+from hentai import Hentai, Format
 
 colorama.init()
 client = commands.Bot(command_prefix = '/', description = "ディスコードでマジック・ナンバーズの検索を行うことが出来るボットです。")
@@ -20,12 +20,12 @@ async def on_ready():
 
 @client.command(aliases = ['emn'])
 async def explore_magic_number(ctx, magic_number: int):
-    result = Hentai(magic_number)
-    embed = discord.Embed(title = result.pretty, color = discord.Color.red())
-    embed.add_field(name = "同人誌を読み始める", value = urljoin(result.url, '1'))
-    embed.add_field(name = "お気に入り", value = f"❤ {result.favorites}")
-    embed.set_thumbnail(url = result.cover)
-    await client.change_presence(status = discord.Status.idle, activity = discord.Game(f"今{result.pretty}を読んでいるよ"))
+    hentai = Hentai(magic_number)
+    embed = discord.Embed(title = hentai.title(Format.Pretty), color = discord.Color.red())
+    embed.add_field(name = "同人誌を読み始める", value = urljoin(hentai.url, '1'))
+    embed.add_field(name = "お気に入り", value = f"❤ {hentai.num_favorites}")
+    embed.set_thumbnail(url = hentai.thumbnail)
+    await client.change_presence(status = discord.Status.idle, activity = discord.Game(f"今{hentai.title(Format.Pretty)}を読んでいるよ"))
     await ctx.send(embed = embed)   
 
 @explore_magic_number.error
@@ -35,7 +35,7 @@ async def on_explore_magic_number_error(ctx, error):
 
 @client.command(aliases = ['rmn'])
 async def random_magic_number(ctx):
-    await explore_magic_number(ctx, magic_number = Hentai.get_random_id())
+    await explore_magic_number(ctx, magic_number = Hentai.random_id())
 
 @client.command(pass_context = True)
 async def help(ctx):
