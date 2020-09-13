@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from datetime import datetime
 from enum import Enum, unique
 from typing import List
@@ -44,7 +45,7 @@ class Hentai(object):
         response.encoding = 'utf-8'
         return response.json()
 
-    def __init__(self, id: int, timeout:int):
+    def __init__(self, id: int, timeout: int):
         self.id = id
         self.timeout = timeout
         self.url = urljoin(Hentai._URL, str(self.id))
@@ -110,13 +111,13 @@ class Hentai(object):
         return int(urlparse(response.url).path[3:-1])
 
     @staticmethod
-    def get_homepage(page:int=1) -> List[Hentai]:
+    def get_homepage(page: int = 1) -> List[Hentai]:
         raise NotImplementedError()
 
     @staticmethod
-    def convert2tag_name(tag_id:int) -> str:
+    def convert2tag_name(tag_id: int) -> str:
         raise NotImplementedError()
 
     @staticmethod
-    def search_by_tag(tag_name:str) -> List[Hentai]:
+    def search_by_tag(tag_name: str) -> List[Hentai]:
         raise NotImplementedError()
