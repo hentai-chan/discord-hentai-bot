@@ -20,7 +20,7 @@ async def on_ready():
 
 @client.command(aliases = ['emn'])
 async def explore_magic_number(ctx, magic_number: int):
-    hentai = Hentai(magic_number)
+    hentai = Hentai(magic_number, timeout = 1)
     embed = discord.Embed(title = hentai.title(Format.Pretty), color = discord.Color.red())
     embed.add_field(name = "同人誌を読み始める", value = urljoin(hentai.url, '1'))
     embed.add_field(name = "お気に入り", value = f"❤ {hentai.num_favorites}")
