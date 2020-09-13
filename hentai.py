@@ -1,3 +1,4 @@
+from __future__ import annotations
 from datetime import datetime
 from enum import Enum, unique
 from typing import List
@@ -104,6 +105,18 @@ class Hentai(object):
         return [page_url(num) for num in range(self.num_pages + 1)] 
 
     @staticmethod
-    def random_id() -> int:
+    def get_random_id() -> int:
         response = Hentai._session.get(urljoin(Hentai._HOME, 'random'))
         return int(urlparse(response.url).path[3:-1])
+
+    @staticmethod
+    def get_homepage(page:int=1) -> List[Hentai]:
+        raise NotImplementedError()
+
+    @staticmethod
+    def convert2tag_name(tag_id:int) -> str:
+        raise NotImplementedError()
+
+    @staticmethod
+    def search_by_tag(tag_name:str) -> List[Hentai]:
+        raise NotImplementedError()
