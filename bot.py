@@ -35,7 +35,7 @@ async def on_explore_magic_number_error(ctx, error):
 
 @client.command(aliases = ['rmn'])
 async def random_magic_number(ctx):
-    await explore_magic_number(ctx, magic_number = Hentai.random_id())
+    await explore_magic_number(ctx, magic_number = Hentai.get_random_id())
 
 @client.command(pass_context = True)
 async def help(ctx):
