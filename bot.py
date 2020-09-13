@@ -39,14 +39,12 @@ async def random_magic_number(ctx):
 
 @client.command(pass_context = True)
 async def help(ctx):
-    author = ctx.message.author
-    embed = discord.Embed(color = discord.Color.gold())
-    embed.set_author(name = "使い方")
+    embed = discord.Embed(title = "使い方", color = discord.Color.gold())
     embed.add_field(name= "/explore_magic_number || /emn [id: magic number]", value = "ＩＤに関連した変態情報を表示する。", inline = False)
     embed.add_field(name= "/random_magic_number || /rmn", value = "ランダムＩＤ自動作成し変態を検索する（パラメータの必要がない）。", inline = False)
-    await author.send(embed = embed)
+    await ctx.send(embed = embed)
 
-def get_token():
+def get_token() -> str:
     with open('secrets.json', mode = 'r') as file_handler:
         return json.load(file_handler).get('token')
 
