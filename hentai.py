@@ -39,15 +39,15 @@ class Hentai(object):
 
     @staticmethod
     def _call_api(url: str, timeout: int) -> dict:
-        response = Hentai._session.get(url)
+        response = Hentai._session.get(url, timeout = timeout)
         response.encoding = 'utf-8'
         return response.json()
 
-    def __init__(self, id: int, timeout:int = 0):
+    def __init__(self, id: int, timeout:int):
         self.id = id
         self.timeout = timeout
         self.url = urljoin(Hentai._URL, str(self.id))
-        self.api = Hentai._call_api(urljoin(Hentai._API, str(self.id)), self.timeout)      
+        self.api = Hentai._call_api(f"{Hentai._API}/{self.id}", self.timeout)      
 
     @property
     def media_id(self) -> int:
