@@ -4,6 +4,8 @@ from typing import List
 from urllib.parse import urljoin, urlparse
 
 import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 
 @unique
@@ -19,21 +21,33 @@ class Extension(Enum):
     GIF = 'g'
 
 class Hentai(object):
-    _url = lambda id: urljoin("https://nhentai.net/api/gallery/", str(id))
+    _HOME = "https://nhentai.net/" 
+    _URL = urljoin(_HOME, '/g')
+    _API = urljoin(_HOME, '/api/gallery')
 
-    def __init__(self, id: int):
-        self.id = id
-        self.url = urljoin("https://nhentai.net/g/", str(self.id))
-        self.api = Hentai._call_api(Hentai._url(self.id))      
-        
+    # sleep time in-between failures = backoff_factor * (2 ** (total - 1))
+    _retry_strategy = Retry(total = 5, status_forcelist = [413, 429, 500, 502, 503, 504], backoff_factor = 1)
+
+    _assert_status_hook = lambda response, *args, **kwargs: response.raise_for_status()
+
+    _session = requests.Session()
+    _session.mount("https://", HTTPAdapter(max_retries = _retry_strategy))
+    _session.hooks['response'] = [_assert_status_hook]
+    _session.headers.update({
+        "User-Agent" : "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36 Edg/85.0.564.51"
+    })
+
     @staticmethod
-    def _call_api(url) -> dict:
-        _response = requests.get(url)
-        _response.encoding = 'utf-8'
-        if _response.status_code != 200:
-            raise requests.ConnectionError(f"Expected status code 200, but got {_response.status_code}")
-        else:
-            return _response.json()
+    def _call_api(url: str, timeout: int) -> dict:
+        response = Hentai._session.get(url)
+        response.encoding = 'utf-8'
+        return response.json()
+
+    def __init__(self, id: int, timeout:int = 0):
+        self.id = id
+        self.timeout = timeout
+        self.url = urljoin(Hentai._URL, str(self.id))
+        self.api = Hentai._call_api(urljoin(Hentai._API, str(self.id)), self.timeout)      
 
     @property
     def media_id(self) -> int:
@@ -91,5 +105,5 @@ class Hentai(object):
 
     @staticmethod
     def random_id() -> int:
-        _session = requests.get("https://nhentai.net/random/")
-        return int(urlparse(_session.url).path[3:-1])
+        response = Hentai._session.get(urljoin(Hentai._HOME, 'random'))
+        return int(urlparse(response.url).path[3:-1])
