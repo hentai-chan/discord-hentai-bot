@@ -22,7 +22,7 @@ async def on_ready():
 async def explore_magic_number(ctx, magic_number: int):
     doujin = Hentai(magic_number)
     embed = discord.Embed(title = doujin.title(Format.Pretty), color = discord.Color.red())
-    embed.add_field(name = "Start Reading", value = urljoin(doujin.url, '1'))
+    embed.add_field(name = "Start Reading", value = doujin.url)
     embed.add_field(name = "Favorites", value = f"❤ {doujin.num_favorites}")
     embed.set_thumbnail(url = doujin.thumbnail)
     await client.change_presence(status = discord.Status.idle, activity = discord.Game(f"Now reading {doujin.title(Format.Pretty)}💖"))
