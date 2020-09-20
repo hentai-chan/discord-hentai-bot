@@ -1,7 +1,7 @@
 # discord-hentai-bot
-ディスコードでマジック・ナンバーズの検索を行うことが出来るボットです。
 
-## 使い方
-先ず`https://discord.com/developers/applications`で新しいアプリケーションとかボットを登録する必要があります。
-次にはルート・ディレクトリに`secrets.json`という設定ファイルを作成し`token`の値を指定します。とどの詰まり`bot.py`
-をコマンドラインから実行することが出来るようになります。
+A bot that allows you to search for Magic Numbers on Discord.
+
+### How to use
+
+First you need to register a new application or bot at https://discord.com/developers/applications. Next, create a configuration file called `secrets.json` in the root directory and specify the `token` value. You will be able to run the jammed `bot.py` from the command line.
