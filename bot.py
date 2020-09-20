@@ -10,28 +10,28 @@ from discord.ext import commands
 from hentai import Hentai, Format
 
 colorama.init()
-client = commands.Bot(command_prefix = '/', description = "ディスコードでマジック・ナンバーズの検索を行うことが出来るボットです。")
+client = commands.Bot(command_prefix = '/', description = "Discord bot that lets you look up magic numbers in chat.")
 client.remove_command('help')
 
 @client.event
 async def on_ready():
-    await client.change_presence(status = discord.Status.online, activity = discord.Game("次の索要求受を期待しているね！"))
-    print(f"{Style.BRIGHT}{Fore.YELLOW}[{dt.now().strftime('%d.%m.%Y %H:%M:%S')}]{Style.RESET_ALL} ボットが起動するに成功しています。")
+    await client.change_presence(status = discord.Status.online, activity = discord.Game("Now taking requests!💖"))
+    print(f"{Style.BRIGHT}{Fore.YELLOW}[{dt.now().strftime('%d.%m.%Y %H:%M:%S')}]{Style.RESET_ALL} Booting up discord-hentai-bot . . .")
 
 @client.command(aliases = ['emn'])
 async def explore_magic_number(ctx, magic_number: int):
-    hentai = Hentai(magic_number, timeout = 1)
-    embed = discord.Embed(title = hentai.title(Format.Pretty), color = discord.Color.red())
-    embed.add_field(name = "同人誌を読み始める", value = urljoin(hentai.url, '1'))
-    embed.add_field(name = "お気に入り", value = f"❤ {hentai.num_favorites}")
-    embed.set_thumbnail(url = hentai.thumbnail)
-    await client.change_presence(status = discord.Status.idle, activity = discord.Game(f"今{hentai.title(Format.Pretty)}を読んでいるよ"))
+    doujin = Hentai(magic_number)
+    embed = discord.Embed(title = doujin.title(Format.Pretty), color = discord.Color.red())
+    embed.add_field(name = "Start Reading", value = urljoin(doujin.url, '1'))
+    embed.add_field(name = "Favorites", value = f"❤ {doujin.num_favorites}")
+    embed.set_thumbnail(url = doujin.thumbnail)
+    await client.change_presence(status = discord.Status.idle, activity = discord.Game(f"Now reading {doujin.title(Format.Pretty)}💖"))
     await ctx.send(embed = embed)   
 
 @explore_magic_number.error
 async def on_explore_magic_number_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
-        await ctx.send("警告：マジック・ナンバーズを指定する必要があります")
+        await ctx.send("Error: Invalid magic number.")
 
 @client.command(aliases = ['rmn'])
 async def random_magic_number(ctx):
@@ -39,9 +39,9 @@ async def random_magic_number(ctx):
 
 @client.command(pass_context = True)
 async def help(ctx):
-    embed = discord.Embed(title = "使い方", color = discord.Color.gold())
-    embed.add_field(name= "/explore_magic_number || /emn [id: magic number]", value = "ＩＤに関連した変態情報を表示する。", inline = False)
-    embed.add_field(name= "/random_magic_number || /rmn", value = "ランダムＩＤ自動作成し変態を検索する（パラメータの必要がない）。", inline = False)
+    embed = discord.Embed(title = "Usage", color = discord.Color.gold())
+    embed.add_field(name= "/explore_magic_number || /emn [id: magic number]", value = "Lookup a user-specified ID.", inline = False)
+    embed.add_field(name= "/random_magic_number || /rmn", value = "Roll a random ID.", inline = False)
     await ctx.send(embed = embed)
 
 def get_token() -> str:
