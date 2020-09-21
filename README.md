@@ -11,4 +11,6 @@ deployment therefore will follow in the near future.
 
 ## Developer Notes
 
-This bot requires python version `3.8+`.
+This bot requires python version `3.8+`. It also uses `Hentai.exists()` which
+isn't implemented in `hentai==1.0`. This code should be working again with the
+next release.
