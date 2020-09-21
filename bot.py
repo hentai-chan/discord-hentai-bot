@@ -8,6 +8,7 @@ from colorama import Fore, Style
 
 import discord
 from discord.ext import commands
+from discord.ext.commands import has_permissions
 from hentai import Format, Hentai
 from psutil import Process
 
@@ -43,18 +44,20 @@ async def on_explore_magic_number_error(ctx, error):
 async def random_magic_number(ctx):
     await explore_magic_number(ctx, magic_number=Hentai.get_random_id())
 
-@client.command(aliases=['ut'])
+@client.command(aliases=['ut'], pass_context=True)
+@has_permissions(manage_roles=True)
 async def uptime(ctx):
     with process.oneshot():
         uptime = timedelta(seconds=time()-process.create_time())
-    await ctx.send(f"Uptime: {uptime.days} days, {uptime.days // 3600} hours and {(uptime.seconds // 60) % 60} minutes.")
+    await ctx.send(f"Uptime: {uptime.days}d:{uptime.days // 3600}h:{(uptime.seconds // 60) % 60}m:{uptime.seconds}s.")
 
 
-@client.command(pass_context = True)
+@client.command(pass_context=True)
 async def help(ctx):
     embed = discord.Embed(title="Usage", color=discord.Color.gold())
     embed.add_field(name="/explore_magic_number || /emn [id: magic number]", value="Lookup a user-specified ID.", inline=False)
     embed.add_field(name="/random_magic_number || /rmn", value="Roll a random ID.", inline=False)
+    embed.add_field(name="/uptime || /ut", value="Shows bot uptime.")
     await ctx.send(embed=embed)
 
 def get_token() -> str:
