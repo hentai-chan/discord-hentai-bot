@@ -1,4 +1,4 @@
 colorama==0.4.3
 discord.py==1.4.1
-hentai==1.0
+hentai==1.1
 psutil==5.7.2
