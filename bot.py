@@ -25,7 +25,7 @@ async def on_ready():
 @client.command(aliases=['emn'])
 async def explore_magic_number(ctx, magic_number: int):
     if not Hentai.exists(magic_number):
-        ctx.send("Error: Invalid magic number.")
+        await ctx.send("Error: Invalid magic number.")
     else:
         doujin = Hentai(magic_number)
         embed = discord.Embed(title=doujin.title(Format.Pretty), color=discord.Color.red())
