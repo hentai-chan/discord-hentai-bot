@@ -11,5 +11,5 @@ deployment therefore will follow in the near future.
 
 ## Developer Notes
 
-This bot requires python version `3.8+`. You can run `/help` in chat to explore all
-features.
+This bot requires python version `3.7+`. Run `/help` in chat to explore all features or inspect the source 
+code here.
