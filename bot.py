@@ -3,16 +3,12 @@ from datetime import datetime as dt
 from datetime import timedelta
 from time import time
 
-import colorama
-from colorama import Fore, Style
-
 import discord
 from discord.ext import commands
 from discord.ext.commands import has_permissions
-from hentai import Format, Hentai
+from hentai import Format, Hentai, Tag
 from psutil import Process
 
-colorama.init()
 client = commands.Bot(command_prefix='/', description="Discord bot that lets you look up magic numbers in chat.")
 client.remove_command('help')
 process = Process()
@@ -20,7 +16,7 @@ process = Process()
 @client.event
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=discord.Game("Now taking requests!💖"))    
-    print(f"{Style.BRIGHT}{Fore.YELLOW}[{dt.now().strftime('%d.%m.%Y %H:%M:%S')}]{Style.RESET_ALL} Booting up discord-hentai-bot . . .")
+    print(f"[{dt.now().strftime('%d.%m.%Y %H:%M:%S')}] Booting up discord-hentai-bot . . .")
 
 @client.command(aliases=['emn'])
 async def explore_magic_number(ctx, magic_number: int):
@@ -30,6 +26,7 @@ async def explore_magic_number(ctx, magic_number: int):
         doujin = Hentai(magic_number)
         embed = discord.Embed(title=doujin.title(Format.Pretty), color=discord.Color.red())
         embed.add_field(name="Start Reading", value=doujin.url)
+        embed.add_field(name="Author", value=Tag.get_names(doujin.artist)[0])
         embed.add_field(name="Favorites", value=f"❤ {doujin.num_favorites}")
         embed.set_thumbnail(url=doujin.thumbnail)
         await client.change_presence(status=discord.Status.idle, activity=discord.Game(f"Now reading {doujin.title(Format.Pretty)}💖"))
