@@ -2,6 +2,13 @@
 
 Discord bot that lets you looks up magic numbers in chat.
 
+## 🚧 Attention
+
+This repository has been marked as readonly. Work on this bot came to a
+halt after I lost interest in pursuing further development. I trust that you'll
+be able to find an alternative project that's actively maintained if you've made
+it this far.
+
 ## Setup & Run
 
 First you need to register a new application or bot at <https://discord.com/developers/applications>.
